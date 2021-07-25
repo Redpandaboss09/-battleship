@@ -1,73 +1,60 @@
 #pragma once
- 
-#include <iostream>
-#include <sstream>
-#include <vector>
+
+#include<iostream>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 
-using namespace sf;
 using namespace std;
+using namespace sf;
 
-const int columns = 10;
-const int rows = 10;
+//Class that acts as the game engine.
 
-//Class that acts as the game engine (Wrapper class)
+//Global variables
+const unsigned int rowLogicSize = 10;
+const unsigned int colLogicSize = 10;
 
-class Game {
-	private:
-		//Window
-		RenderWindow* window;
-		VideoMode videoMode;
-		Event event;
+class Game
+{
+private:
+	//Window
+	RenderWindow* window;
+	VideoMode videoMode;
+	Event event;
+	
+	//Color
+	Color allColor;
 
-		//Mouse positions
-		Vector2i mousePosWindow;
+	//Game logic
+	bool endGame;
 
-		//Resources
-		Font font;
-		Color allColor;
+	//Logic grid variables
+	unsigned char playerBoard[rowLogicSize][colLogicSize];
+	static unsigned char lastPlayerBoard[rowLogicSize][colLogicSize];
+	unsigned char AIBoard[rowLogicSize][colLogicSize];
+	static unsigned char lastAIBoard[rowLogicSize][colLogicSize];
 
-		//Text 
-		Text uiText;
+	//Visual grid variables
+	VertexArray gridLines(Lines, 2);
+	
+	//Private functions
+	void initVariables();
+	void initWindow();
 
-		//Game variables
-		bool endGame;
+public:
+	//Constructors / Destructors
+	Game();
+	virtual ~Game();
 
-		//Grid variables
-		VertexArray grid;
-		float rowH;
-		float colW;
+	//Accessors
+	const bool running() const;
+	const bool getEndGame() const;
 
-		//Private functions
-		void initVariables();
-		void initWindow();
-		void initFonts();
-		void initGrid();
-		void initText();
-	public:
-		//Constructors / Destructors
-		Game();
-		virtual ~Game();
+	void pollEvents();
+	void update();
 
-		//Accessors
-		const bool running() const;
-		const bool getEndGame() const;
-
-		//Functions
-		void spawnEnemy();
-		void drawGrid(RenderTarget& target) const;
-
-		void pollEvents();
-		void updateText();
-		void updateEnemies();
-		void update();
-
-		void renderText(sf::RenderTarget& target);
-		void renderEnemies(sf::RenderTarget& target);
-		void render();
+	void render();
 };
 
