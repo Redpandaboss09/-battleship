@@ -1,6 +1,7 @@
 #pragma once
 
-#include<iostream>
+#include <iostream>
+#include <array>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
@@ -49,9 +50,9 @@ class Game {
 		void initVisualGrid();
 		void initLogicGrid();
 
-		//Grid status
+		//Grid status 
 		enum GridStatus {
-			empty, ship, miss, hit
+			nothing, filled, wrong, hurt
 		};
 
 	public:
@@ -68,5 +69,3 @@ class Game {
 
 		void render();
 };
-
-
