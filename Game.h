@@ -16,45 +16,57 @@ using namespace sf;
 const unsigned int rowLogicSize = 10;
 const unsigned int colLogicSize = 10;
 
-class Game
-{
-private:
-	//Window
-	RenderWindow* window;
-	VideoMode videoMode;
-	Event event;
+class Game {
+	private:
+		//Window
+		RenderWindow* window;
+		VideoMode videoMode;
+		Event event;
 	
-	//Color
-	Color allColor;
+		//Color
+		Color allColor;
 
-	//Game logic
-	bool endGame;
+		//Game logic
+		bool endGame;
 
-	//Logic grid variables
-	unsigned char playerBoard[rowLogicSize][colLogicSize];
-	static unsigned char lastPlayerBoard[rowLogicSize][colLogicSize];
-	unsigned char AIBoard[rowLogicSize][colLogicSize];
-	static unsigned char lastAIBoard[rowLogicSize][colLogicSize];
+		//Logic grid variables
+		unsigned char playerBoard[rowLogicSize][colLogicSize];
+		static unsigned char lastPlayerBoard[rowLogicSize][colLogicSize];
+		unsigned char AIBoard[rowLogicSize][colLogicSize];
+		static unsigned char lastAIBoard[rowLogicSize][colLogicSize];
 
-	//Visual grid variables
-	VertexArray gridLines(Lines, 2);
+		//Visual grid variables
+		VertexArray gridLines;
+		float cellSize;
+		float baseX, baseY;
+		float endX, endY;
+		int numHLines;
+		int numVLines;
 	
-	//Private functions
-	void initVariables();
-	void initWindow();
+		//Private functions
+		void initVariables();
+		void initWindow();
+		void initVisualGrid();
+		void initLogicGrid();
 
-public:
-	//Constructors / Destructors
-	Game();
-	virtual ~Game();
+		//Grid status
+		enum GridStatus {
+			empty, ship, miss, hit
+		};
 
-	//Accessors
-	const bool running() const;
-	const bool getEndGame() const;
+	public:
+		//Constructors / Destructors
+		Game();
+		virtual ~Game();
 
-	void pollEvents();
-	void update();
+		//Accessors
+		const bool running() const;
+		const bool getEndGame() const;
 
-	void render();
+		void pollEvents();
+		void update();
+
+		void render();
 };
+
 
