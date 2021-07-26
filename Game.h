@@ -31,9 +31,9 @@ class Game {
 
 		//Logic grid variables
 		unsigned char playerBoard[rowLogicSize][colLogicSize];
-		static unsigned char lastPlayerBoard[rowLogicSize][colLogicSize];
+		static char lastPlayerBoard[rowLogicSize][colLogicSize];
 		unsigned char AIBoard[rowLogicSize][colLogicSize];
-		static unsigned char lastAIBoard[rowLogicSize][colLogicSize];
+		static char lastAIBoard[rowLogicSize][colLogicSize];
 
 		//Visual grid variables
 		VertexArray gridLines;
