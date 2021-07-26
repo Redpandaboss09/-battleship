@@ -6,31 +6,80 @@ void Game::initVariables()
 	this->window = nullptr;
 
 	//Color
-	allColor = Color::Color(65, 255, 0);
+	this->allColor = Color::Color(65, 255, 0);
 
 	//Game logic
 	this->endGame = false;
 }
 
-void Game::initWindow()
-{
-	this->videoMode.height = 600;
-	this->videoMode.width = 800;
+void Game::initWindow() {
+	this->videoMode.height = 1080;
+	this->videoMode.width = 1920;
 
-	this->window = new sf::RenderWindow(this->videoMode, "Game 1", sf::Style::Titlebar | sf::Style::Close);
+	this->window = new RenderWindow(this->videoMode, "Battleship", Style::Fullscreen);
 
 	this->window->setFramerateLimit(60);
 }
 
-//Constructors / Destructors
-Game::Game()
-{
-	this->initVariables();
-	this->initWindow();
+void Game::initVisualGrid() {
+	gridLines = VertexArray(Lines, 44);
+
+	//Amount of lines
+	numHLines = 11;
+	numVLines = 11;
+
+	cellSize = 10.0f;
+
+	//Coords
+	baseX = 0;
+	baseY = 0;
+	endX = 0;
+	endY = 0;
+
+	//Constants for horizontal lines
+	baseX = 80.0f;
+	endX = 180.0f;
+
+	//Changed variables in horizontal loop
+	baseY = 80.0f;
+	endY = 80.0f;
+
+	//Horizontal lines
+	for (int i = 0; i < 11; i++) {
+		gridLines[i].position = Vector2f(baseX, baseY);
+		gridLines[i + 1].position = Vector2f(endX, endY);
+
+		baseY += cellSize;
+		endY += cellSize;
+	} 
 }
 
-Game::~Game()
-{
+void Game::initLogicGrid() {
+	//Enum declares grid status
+	GridStatus empty = GridStatus::empty;
+	GridStatus ship = GridStatus::ship;
+	GridStatus miss = GridStatus::miss;
+	GridStatus hit = GridStatus::hit;
+
+	for (int i = 0; i < rowLogicSize; i++) {
+		for (int j = 0; j < colLogicSize; j++) {
+			this->playerBoard[i][j] = empty;
+			this->lastPlayerBoard[i][j] = empty;
+			this->AIBoard[i][j] = empty;
+			this->lastAIBoard[i][j] = empty;
+		}
+	}
+}
+
+//Constructors / Destructors
+Game::Game() {
+	this->initVariables();
+	this->initWindow();
+	this->initLogicGrid();
+	this->initVisualGrid();
+}
+
+Game::~Game() {
 	delete this->window;
 }
 
@@ -53,11 +102,11 @@ void Game::pollEvents()
 	{
 		switch (this->event.type)
 		{
-		case sf::Event::Closed:
+		case Event::Closed:
 			this->window->close();
 			break;
-		case sf::Event::KeyPressed:
-			if (this->event.key.code == sf::Keyboard::Escape)
+		case Event::KeyPressed:
+			if (this->event.key.code == Keyboard::Escape)
 				this->window->close();
 			break;
 		}
@@ -90,6 +139,7 @@ void Game::render()
 	this->window->clear();
 
 	//Draw game objects
+	this->window->draw(gridLines);
 
 	this->window->display();
 }
